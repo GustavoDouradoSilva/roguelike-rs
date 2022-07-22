@@ -1,5 +1,13 @@
 use crate::*;
 
+#[derive(Clone)]
+pub struct Room {
+    pub height: i32,
+    pub width: i32,
+    pub pos: Position,
+    pub center: Position,
+}
+
 pub fn create_room(x: i32, y: i32, width: i32, height: i32) -> Room {
     let new_room = Room {
         height: height,
@@ -13,20 +21,42 @@ pub fn create_room(x: i32, y: i32, width: i32, height: i32) -> Room {
     new_room
 }
 
-pub fn add_room_to_map(room: &mut Room, map: &mut Vec<Vec<Tile>>) {
+/*
+pub struct Map {
+    pub tiles: Vec<Vec<TileType>>,
+    pub rooms: Vec<Room>,
+    pub width: i32,
+    pub height: i32,
+    pub tile_content: Vec<Vec<Entity>>
+}
+impl Map {
+    pub fn add_room(&mut self, room: &mut Room) {
+        //let mut new_map = map;
+        for y in room.pos.y..room.pos.y + room.height {
+            for x in room.pos.x..room.pos.x + room.width {
+                self.tiles[y as usize][x as usize] = TileType {
+                    ch: '.',
+                    walkable: true,
+                };
+            }
+        }
+    }
+}
+*/
+
+pub fn add_room_to_map(room: &mut Room, map: &mut Vec<Vec<TileType>>) {
     //let mut new_map = map;
     for y in room.pos.y..room.pos.y + room.height {
         for x in room.pos.x..room.pos.x + room.width {
-            map[y as usize][x as usize] = Tile {
+            map[y as usize][x as usize] = TileType {
                 ch: '.',
                 walkable: true,
-                
             };
         }
     }
 }
 
-pub fn connect_room_centers(center1: &Position, center2: &Position, map: &mut Vec<Vec<Tile>>) {
+pub fn connect_room_centers(center1: &Position, center2: &Position, map: &mut Vec<Vec<TileType>>) {
     let mut temp = Position {
         x: center1.x,
         y: center1.y,

@@ -5,7 +5,19 @@ use rand::Rng;
 pub const MAP_HEIGHT: usize = 25;
 pub const MAP_WIDTH: usize = 100;
 
-pub fn setup_map(map: &mut Vec<Vec<Tile>>) -> Position {
+#[derive(Clone)]
+pub struct TileType {
+    pub ch: char,
+    pub walkable: bool,
+    //pub visible: bool,
+    //pub revealed: bool
+}
+
+impl TileType{
+    
+}
+
+pub fn setup_map(map: &mut Vec<Vec<TileType>>) -> Position {
     let (mut x, mut y, mut height, mut width): (usize, usize, i32, i32);
 
     let n_rooms: i32 = rand::thread_rng().gen_range(5..14);

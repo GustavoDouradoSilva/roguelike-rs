@@ -1,6 +1,6 @@
 use pancurses::*;
 
-use crate::{draw, player, *};
+use crate::*;
 
 
 pub fn curses_setup() {
@@ -16,7 +16,7 @@ pub fn curses_setup() {
     */
 }
 
-pub fn game_loop(window: &mut Window, player: &mut Entity, map: &mut Vec<Vec<Tile>>) {
+pub fn game_loop(window: &mut Window, player: &mut Entity, map: &mut Vec<Vec<TileType>>) {
     draw::draw_everything(map, player, window);
     loop {
         match window.getch() {
@@ -25,7 +25,7 @@ pub fn game_loop(window: &mut Window, player: &mut Entity, map: &mut Vec<Vec<Til
                 break;
             }
             Some(Input::Character(input)) => {
-                player::handle_input(input, player, map);
+                player.handle_input(input, map);
                 draw::draw_everything(map, player, window);
             }
             Some(Input::KeyDC) => break,
