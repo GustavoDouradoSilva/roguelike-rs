@@ -1,19 +1,19 @@
 use pancurses::*;
-
 use crate::*;
 
+pub const PLAYER_COLOR:u32 = 1;
+pub const WALL_COLOR:u32 = 2;
+pub const FLOOR_COLOR:u32 = 3;
 
 pub fn curses_setup() {
     initscr();
     noecho();
     curs_set(0);
-    /* 
-    if has_colors() {
-        start_color();
-        init_pair(VISIBLE_COLOR, COLOR_WHITE, COLOR_BLACK);
-        init_pair(SEEN_COLOR, COLOR_BLUE, COLOR_BLACK);
-    }
-    */
+
+    start_color();
+    init_pair(PLAYER_COLOR as i16, COLOR_GREEN, COLOR_BLACK);
+    init_pair(WALL_COLOR as i16, COLOR_WHITE, COLOR_WHITE);
+    init_pair(FLOOR_COLOR as i16, COLOR_BLACK, COLOR_BLACK);
 }
 
 pub fn game_loop(window: &mut Window, player: &mut Entity, map: &mut Vec<Vec<TileType>>) {

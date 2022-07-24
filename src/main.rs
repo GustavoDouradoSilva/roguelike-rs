@@ -18,7 +18,7 @@ use player::*;
 
 fn main() {
     curses_setup();
-    let tile = TileType { ch: '#', walkable: false};
+    let tile = TileType { ch: '#', walkable: false, color: pancurses::COLOR_PAIR(crate::engine::PLAYER_COLOR) };
     let mut map = vec![vec![tile;MAP_WIDTH]; MAP_HEIGHT];
     let mut player = Entity::create_player(setup_map(&mut map));
     let mut window = pancurses::newwin(MAP_HEIGHT as i32, MAP_WIDTH as i32, 0, 0);

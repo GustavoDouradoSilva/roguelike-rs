@@ -3,6 +3,7 @@ use crate::*;
 pub struct Entity {
     pub pos: Position,
     pub ch: char,
+    pub color: u32,
 }
 impl Entity {
     pub fn create_player(start_pos: Position) -> Entity {
@@ -12,6 +13,7 @@ impl Entity {
                 y: start_pos.y,
             },
             ch: '@',
+            color: pancurses::COLOR_PAIR(PLAYER_COLOR),
         };
         return new_player;
     }
@@ -44,5 +46,11 @@ impl Entity {
         }
         self.pos.x = new_pos.x;
         self.pos.y = new_pos.y;
+    }
+
+    pub fn draw(&mut self, window: &mut pancurses::Window) {
+        window.attron(self.color);
+        window.mvaddch(self.pos.y, self.pos.x, self.ch);
+        window.attroff(self.color);
     }
 }

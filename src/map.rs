@@ -9,12 +9,12 @@ pub const MAP_WIDTH: usize = 100;
 pub struct TileType {
     pub ch: char,
     pub walkable: bool,
+    pub color: u32,
     //pub visible: bool,
     //pub revealed: bool
 }
 
 impl TileType{
-    
 }
 
 pub fn setup_map(map: &mut Vec<Vec<TileType>>) -> Position {
@@ -55,3 +55,4 @@ pub fn setup_map(map: &mut Vec<Vec<TileType>>) -> Position {
     };
     start_pos
 }
+

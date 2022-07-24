@@ -51,6 +51,7 @@ pub fn add_room_to_map(room: &mut Room, map: &mut Vec<Vec<TileType>>) {
             map[y as usize][x as usize] = TileType {
                 ch: '.',
                 walkable: true,
+                color: pancurses::COLOR_PAIR(crate::engine::FLOOR_COLOR)
             };
         }
     }
