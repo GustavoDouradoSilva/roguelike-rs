@@ -12,7 +12,7 @@ use entity::*;
 use map::*;
 
 fn main() {
-    std::fs::File::create("target/log.txt").expect("Unable to create file");
+    std::fs::File::create("log.txt").expect("Unable to create file");
 
     let mut player = Creature {
         name: "player".to_string(),
@@ -66,7 +66,6 @@ fn main() {
     let mut window = pancurses::newwin(MAP_HEIGHT as i32, MAP_WIDTH as i32, 0, 0);
     window.keypad(true);
     player.pos = setup_map(&mut map);
-
     game_loop(&mut window, &mut player, &mut map);
     close_game();
 }
