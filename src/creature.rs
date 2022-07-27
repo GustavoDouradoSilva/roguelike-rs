@@ -46,8 +46,9 @@ impl Creature {
             return;
         }
         self.pos = new_pos.clone();
-    }
 
+        write_log(format!("{} moved to {:?}", self.name, self.pos));
+    }
     pub fn draw(&mut self, window: &mut pancurses::Window) {
         window.attron(pancurses::COLOR_PAIR(self.draw.color));
         window.mvaddch(self.pos.y, self.pos.x, self.draw.ch);

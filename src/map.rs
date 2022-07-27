@@ -1,4 +1,4 @@
-use crate::{entity::*, room::*};
+use crate::{entity::*, room::*, engine::write_log};
 //use crate::{Position, Tile, Room};
 use rand::Rng;
 
@@ -50,5 +50,7 @@ pub fn setup_map(map: &mut Vec<Vec<TileType>>) -> Position {
         x: rooms[0].center.x,
         y: rooms[0].center.y,
     };
+
+    write_log("Map generated".to_string());
     start_pos
 }
