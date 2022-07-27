@@ -1,32 +1,70 @@
+mod creature;
 mod draw;
 mod engine;
+mod entity;
 mod map;
-mod player;
 mod room;
 
-#[derive(Clone)]
-pub struct Position {
-    pub x: i32,
-    pub y: i32,
-}
-
 //use std::*;
+use creature::*;
 use engine::*;
+use entity::*;
 use map::*;
-use player::*;
-
 
 fn main() {
-    curses_setup();
-    let tile = TileType { ch: '#', walkable: false, color: pancurses::COLOR_PAIR(crate::engine::PLAYER_COLOR) };
-    let mut map = vec![vec![tile;MAP_WIDTH]; MAP_HEIGHT];
-    let mut player = Entity::create_player(setup_map(&mut map));
-    let mut window = pancurses::newwin(MAP_HEIGHT as i32, MAP_WIDTH as i32, 0, 0);
-    window.keypad(true);
+    let mut player = Creature {
+        name: "player".to_string(),
+        pos: Position { x: 0, y: 0 },
+        draw: Draw {
+            ch: '@',
+            color: PLAYER_COLOR,
+        },
+    };
 
-    //let tiles = vec![vec![Tile{ch:'#', walkable: false}; MAP_WIDTH]; MAP_HEIGHT];
+    /*
+    let npc = Creature {
+        name: "npc".to_string(),
+        pos: Position { x: 0, y: 0 },
+        draw: Draw {
+            ch: '@',
+            color: PLAYER_COLOR,
+        },
+    };
+    */
+
+    let tile = TileType {
+        ch: '#',
+        walkable: false,
+        color: pancurses::COLOR_PAIR(crate::engine::PLAYER_COLOR),
+    };
+
+    /*
+    let wall = Tile {
+        name: "wall".to_string(),
+        draw: Draw {
+            ch: '#',
+            color: WALL_COLOR,
+        },
+        walkable: false,
+    };
+
+    let floor = Tile {
+        name: "floor".to_string(),
+        draw: Draw {
+            ch: '.',
+            color: FLOOR_COLOR,
+        },
+        walkable: true,
+    };
+    */
+    curses_setup();
+
+    let mut map = vec![vec![tile; MAP_WIDTH]; MAP_HEIGHT];
+
+    player.pos = setup_map(&mut map);
+    let mut window = pancurses::newwin(MAP_HEIGHT as i32, MAP_WIDTH as i32, 0, 0);
+    //window.keypad(true);
 
     game_loop(&mut window, &mut player, &mut map);
-
     close_game();
 }

@@ -1,4 +1,4 @@
-use crate::*;
+use crate::{entity::*, *};
 
 #[derive(Clone)]
 pub struct Room {
@@ -49,9 +49,9 @@ pub fn add_room_to_map(room: &mut Room, map: &mut Vec<Vec<TileType>>) {
     for y in room.pos.y..room.pos.y + room.height {
         for x in room.pos.x..room.pos.x + room.width {
             map[y as usize][x as usize] = TileType {
-                ch: '.',
+                ch: ' ',
                 walkable: true,
-                color: pancurses::COLOR_PAIR(crate::engine::FLOOR_COLOR)
+                color: pancurses::COLOR_PAIR(crate::engine::FLOOR_COLOR),
             };
         }
     }
@@ -74,7 +74,7 @@ pub fn connect_room_centers(center1: &Position, center2: &Position, map: &mut Ve
         } else {
             break;
         }
-        map[temp.y as usize][temp.x as usize].ch = '.';
+        map[temp.y as usize][temp.x as usize].ch = ' ';
         map[temp.y as usize][temp.x as usize].walkable = true;
     }
 }

@@ -1,4 +1,4 @@
-use crate::{room::*, *};
+use crate::{entity::*, room::*};
 //use crate::{Position, Tile, Room};
 use rand::Rng;
 
@@ -12,9 +12,6 @@ pub struct TileType {
     pub color: u32,
     //pub visible: bool,
     //pub revealed: bool
-}
-
-impl TileType{
 }
 
 pub fn setup_map(map: &mut Vec<Vec<TileType>>) -> Position {
@@ -55,4 +52,3 @@ pub fn setup_map(map: &mut Vec<Vec<TileType>>) -> Position {
     };
     start_pos
 }
-
