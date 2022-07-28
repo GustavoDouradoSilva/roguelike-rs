@@ -1,12 +1,12 @@
 use crate::*;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Position {
     pub x: i32,
     pub y: i32,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Draw {
     pub ch: char,
     pub color: u32,
@@ -28,7 +28,7 @@ impl Object {
         }
     }
 
-    pub fn move_to(&mut self, new_pos: &Position, map: &Vec<Vec<TileType>>) {
+    pub fn move_to(&mut self, new_pos: Position, game: &mut Game) {
         if new_pos.x < 0
             || new_pos.x >= map::MAP_WIDTH as i32
             || new_pos.y < 0
@@ -36,12 +36,12 @@ impl Object {
         {
             return;
         }
-        if !map[new_pos.y as usize][new_pos.x as usize].walkable {
+        if !game.map[new_pos.y as usize][new_pos.x as usize].walkable {
             return;
         }
         self.pos = new_pos.clone();
 
-        write_log(format!("{} moved to {:?}", self.name, self.pos));
+        write_log(format!("{} moved to {:?}", self.name, self.pos), game);
     }
     pub fn draw(&self, window: &mut pancurses::Window) {
         window.attron(self.draw.color);
@@ -49,7 +49,7 @@ impl Object {
         window.attroff(self.draw.color);
     }
 
-    pub fn handle_input(&mut self, input: char, map: &mut Vec<Vec<TileType>>) {
+    pub fn handle_input(&mut self, input: char, game: &mut Game) {
         let mut new_pos = self.pos.clone();
 
         match input {
@@ -60,7 +60,7 @@ impl Object {
             _ => return,
         }
 
-        self.move_to(&new_pos, &map);
+        self.move_to(new_pos, game);
     }
 }
 
@@ -69,6 +69,7 @@ pub struct Tile {
     pub blocked: bool,
     pub block_sight: bool
 }
+/* 
 impl  Tile {
     pub fn empty() -> Self {
         Tile {
@@ -84,5 +85,5 @@ impl  Tile {
         }
     }
 }
-
+*/
 

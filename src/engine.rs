@@ -9,9 +9,10 @@ pub const NPC_COLOR: u32 = 4;
 pub struct Game
 {
     pub map: Vec<Vec<TileType>>,
-    pub objects: Vec<Object>,
+    //pub objects: Vec<Object>,
     pub window: pancurses::Window,
     pub log_win: pancurses::Window,
+    pub log_file: std::fs::File,
 }
 
 pub fn curses_setup() {
@@ -25,19 +26,12 @@ pub fn curses_setup() {
     init_pair(NPC_COLOR as i16, COLOR_YELLOW, COLOR_BLACK);
 }
 //writes to the log file
-pub fn write_log(log: String) {
+pub fn write_log(log: String, game: &mut Game) {
     use std::io::Write;
 
-    let mut file = std::fs::OpenOptions::new()
-        .write(true)
-        .append(true) // This is needed to append to file
-        .open("log.txt")
-        .unwrap();
-
-    write!(file, "{}\n", log).expect("Unable to write file");
+    write!(game.log_file, "{}\n", log).expect("Unable to write file");
 }
 
-//writes to the log_win
 pub fn write_log_win(log_win: &mut pancurses::Window) {
     let tmp_log = std::fs::read_to_string("log.txt").expect("Error in reading the file");
 
@@ -57,27 +51,21 @@ pub fn write_log_win(log_win: &mut pancurses::Window) {
     log_win.mvaddstr(0, 0, log);
     log_win.refresh();
 }
+    pub fn game_loop(game: &mut Game, objects: &mut Vec<Object>) {
+    write_log("Game loop started".to_string(), game);
+    draw::draw_everything(objects, game);
 
-pub fn game_loop(window: &mut Window, objects: &mut Vec<Object>, map: &mut Vec<Vec<TileType>>) {
-    write_log("Game loop started".to_string());
-    draw::draw_everything(map, objects, window);
-
-    //let mut log_win = pancurses::newwin(10 as i32, MAP_WIDTH as i32, MAP_HEIGHT as i32 + 1, 0);
-    let mut log_win = pancurses::newwin(MAP_HEIGHT as i32, 45, 0, MAP_WIDTH as i32 + 1);
-    write_log_win(&mut log_win);
-
-    //let mut player = &objects[0];
-
+    write_log_win(&mut game.log_win);
     loop {
-        match window.getch() {
+        match game.window.getch() {
             //'\u{1b}' = ESC
             Some(Input::Character('\u{1b}')) => {
                 break;
             }
             Some(Input::Character(input)) => {
-                objects[0].handle_input(input, map);
-                draw::draw_everything(map, objects, window);
-                write_log_win(&mut log_win);
+                objects[0].handle_input(input, game);
+                draw::draw_everything(objects,game);
+                write_log_win(&mut game.log_win);
             }
             Some(Input::KeyDC) => break,
             //Some(pancurses::Input::KeyUp) => { ch = 'w'; },
