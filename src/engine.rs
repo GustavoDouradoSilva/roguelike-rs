@@ -6,14 +6,22 @@ pub const WALL_COLOR: u32 = 2;
 pub const FLOOR_COLOR: u32 = 3;
 pub const NPC_COLOR: u32 = 4;
 
+pub struct Game
+{
+    pub map: Vec<Vec<TileType>>,
+    pub objects: Vec<Object>,
+    pub window: pancurses::Window,
+    pub log_win: pancurses::Window,
+}
+
 pub fn curses_setup() {
     initscr();
     noecho();
     curs_set(0);
     start_color();
     init_pair(PLAYER_COLOR as i16, COLOR_GREEN, COLOR_BLACK);
-    init_pair(WALL_COLOR as i16, COLOR_WHITE, COLOR_WHITE);
-    init_pair(FLOOR_COLOR as i16, COLOR_BLACK, COLOR_BLACK);
+    init_pair(WALL_COLOR as i16, COLOR_WHITE, COLOR_BLACK);
+    init_pair(FLOOR_COLOR as i16, COLOR_WHITE, COLOR_BLACK);
     init_pair(NPC_COLOR as i16, COLOR_YELLOW, COLOR_BLACK);
 }
 //writes to the log file
@@ -50,13 +58,15 @@ pub fn write_log_win(log_win: &mut pancurses::Window) {
     log_win.refresh();
 }
 
-pub fn game_loop(window: &mut Window, player: &mut Creature, map: &mut Vec<Vec<TileType>>) {
+pub fn game_loop(window: &mut Window, objects: &mut Vec<Object>, map: &mut Vec<Vec<TileType>>) {
     write_log("Game loop started".to_string());
-    draw::draw_everything(map, player, window);
+    draw::draw_everything(map, objects, window);
 
     //let mut log_win = pancurses::newwin(10 as i32, MAP_WIDTH as i32, MAP_HEIGHT as i32 + 1, 0);
     let mut log_win = pancurses::newwin(MAP_HEIGHT as i32, 45, 0, MAP_WIDTH as i32 + 1);
     write_log_win(&mut log_win);
+
+    //let mut player = &objects[0];
 
     loop {
         match window.getch() {
@@ -65,8 +75,8 @@ pub fn game_loop(window: &mut Window, player: &mut Creature, map: &mut Vec<Vec<T
                 break;
             }
             Some(Input::Character(input)) => {
-                player.handle_input(input, map);
-                draw::draw_everything(map, player, window);
+                objects[0].handle_input(input, map);
+                draw::draw_everything(map, objects, window);
                 write_log_win(&mut log_win);
             }
             Some(Input::KeyDC) => break,

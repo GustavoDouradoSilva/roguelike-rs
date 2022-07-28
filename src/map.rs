@@ -1,4 +1,4 @@
-use crate::{engine::write_log, entity::*, room::*};
+use crate::{engine::write_log, object::*, room::*};
 //use crate::{Position, Tile, Room};
 use rand::Rng;
 

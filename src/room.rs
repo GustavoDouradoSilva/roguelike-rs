@@ -1,4 +1,4 @@
-use crate::{entity::*, *};
+use crate::{object::*, *};
 
 #[derive(Clone)]
 pub struct Room {

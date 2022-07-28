@@ -1,71 +1,61 @@
-mod creature;
 mod draw;
 mod engine;
-mod entity;
 mod map;
+mod object;
 mod room;
 
 //use std::*;
-use creature::*;
 use engine::*;
-use entity::*;
 use map::*;
+use object::*;
 
 fn main() {
     std::fs::File::create("log.txt").expect("Unable to create file");
 
-    let mut player = Creature {
-        name: "player".to_string(),
-        pos: Position { x: 0, y: 0 },
-        draw: Draw {
-            ch: '@',
-            color: PLAYER_COLOR,
-        },
-    };
-
-    /*
-    let npc = Creature {
-        name: "npc".to_string(),
-        pos: Position { x: 0, y: 0 },
-        draw: Draw {
-            ch: '@',
-            color: PLAYER_COLOR,
-        },
-    };
-    */
-
     let tile = TileType {
         ch: '#',
         walkable: false,
-        color: pancurses::COLOR_PAIR(crate::engine::PLAYER_COLOR),
+        color: pancurses::COLOR_PAIR(WALL_COLOR),
     };
-
-    /*
-    let wall = Tile {
-        name: "wall".to_string(),
-        draw: Draw {
-            ch: '#',
-            color: WALL_COLOR,
-        },
-        walkable: false,
-    };
-
-    let floor = Tile {
-        name: "floor".to_string(),
-        draw: Draw {
-            ch: '.',
-            color: FLOOR_COLOR,
-        },
-        walkable: true,
-    };
-    */
 
     curses_setup();
-    let mut map = vec![vec![tile; MAP_WIDTH]; MAP_HEIGHT];
+    let mut game = Game {
+        map: vec![vec![tile; MAP_WIDTH]; MAP_HEIGHT],
+        objects: Vec::new(),
+        window: pancurses::initscr(),
+        log_win: pancurses::newwin(MAP_HEIGHT as i32, 45, 0, MAP_WIDTH as i32 + 1),
+    };
+
+
+    //let mut objects: Vec<Object> = Vec::new();
+    game.objects.push(Object::new(
+        "player".to_string(),
+        Position { x: 0, y: 0 },
+        Draw {
+            ch: '@',
+            color: pancurses::COLOR_PAIR(PLAYER_COLOR),
+        },
+    ));
+    game.objects.push(Object::new(
+        "npc".to_string(),
+        Position { x: 0, y: 0 },
+        Draw {
+            ch: '@',
+            color: pancurses::COLOR_PAIR(NPC_COLOR),
+        },
+    ));
+
+    //let mut objects = vec![player, npc];
+    let player = &mut game.objects[0];
+    //let npc = &mut objects[1];
+
+    
+    
+    //let mut map = vec![vec![tile; MAP_WIDTH]; MAP_HEIGHT];
 
     let mut window = pancurses::newwin(MAP_HEIGHT as i32, MAP_WIDTH as i32, 0, 0);
     window.keypad(true);
-    player.pos = setup_map(&mut map);
-    game_loop(&mut window, &mut player, &mut map);
+    player.move_to(&setup_map(&mut game.map), &game.map);
+    game_loop(&mut window, &mut game.objects, &mut game.map);
     close_game();
 }
