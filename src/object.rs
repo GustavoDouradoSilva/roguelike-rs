@@ -21,11 +21,7 @@ pub struct Object {
 
 impl Object {
     pub fn new(name: String, pos: Position, draw: Draw) -> Object {
-        Object {
-            name,
-            pos,
-            draw,
-        }
+        Object { name, pos, draw }
     }
 
     pub fn move_to(&mut self, new_pos: Position, game: &mut Game) {
@@ -41,7 +37,7 @@ impl Object {
         }
         self.pos = new_pos.clone();
 
-        write_log(format!("{} moved to {:?}", self.name, self.pos), game);
+        write_log(format!("{} moved to {:?}", self.name, self.pos), &mut game.log_file);
     }
     pub fn draw(&self, window: &mut pancurses::Window) {
         window.attron(self.draw.color);
@@ -67,9 +63,10 @@ impl Object {
 #[derive(Clone, Copy, Debug)]
 pub struct Tile {
     pub blocked: bool,
-    pub block_sight: bool
+    pub block_sight: bool,
 }
-/* 
+
+/*
 impl  Tile {
     pub fn empty() -> Self {
         Tile {
@@ -86,4 +83,3 @@ impl  Tile {
     }
 }
 */
-

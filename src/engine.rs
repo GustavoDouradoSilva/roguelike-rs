@@ -6,8 +6,7 @@ pub const WALL_COLOR: u32 = 2;
 pub const FLOOR_COLOR: u32 = 3;
 pub const NPC_COLOR: u32 = 4;
 
-pub struct Game
-{
+pub struct Game {
     pub map: Vec<Vec<TileType>>,
     //pub objects: Vec<Object>,
     pub window: pancurses::Window,
@@ -26,11 +25,18 @@ pub fn curses_setup() {
     init_pair(NPC_COLOR as i16, COLOR_YELLOW, COLOR_BLACK);
 }
 //writes to the log file
-pub fn write_log(log: String, game: &mut Game) {
+
+enum LogColors 
+{
+    Green, Red, White, Yellow,
+}
+
+pub fn write_log(log: String, log_file: &mut std::fs::File) {
     use std::io::Write;
 
-    write!(game.log_file, "{}\n", log).expect("Unable to write file");
+    write!(log_file, "{}\n", log).expect("Unable to write file");
 }
+
 
 pub fn write_log_win(log_win: &mut pancurses::Window) {
     let tmp_log = std::fs::read_to_string("log.txt").expect("Error in reading the file");
@@ -51,8 +57,8 @@ pub fn write_log_win(log_win: &mut pancurses::Window) {
     log_win.mvaddstr(0, 0, log);
     log_win.refresh();
 }
-    pub fn game_loop(game: &mut Game, objects: &mut Vec<Object>) {
-    write_log("Game loop started".to_string(), game);
+pub fn game_loop(game: &mut Game, objects: &mut Vec<Object>) {
+    write_log("Game loop started".to_string(), &mut game.log_file);
     draw::draw_everything(objects, game);
 
     write_log_win(&mut game.log_win);
@@ -64,7 +70,7 @@ pub fn write_log_win(log_win: &mut pancurses::Window) {
             }
             Some(Input::Character(input)) => {
                 objects[0].handle_input(input, game);
-                draw::draw_everything(objects,game);
+                draw::draw_everything(objects, game);
                 write_log_win(&mut game.log_win);
             }
             Some(Input::KeyDC) => break,

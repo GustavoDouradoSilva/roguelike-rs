@@ -11,3 +11,4 @@ this game is incomplete and has just the rooms, halls and a simple movement syst
 - [ ] UI
 - [ ] NEW MAP
 - [ ] CHANGE TILE SYSTEM
+- [ ] ROOMS OVERLAYING 

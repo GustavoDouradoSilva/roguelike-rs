@@ -9,16 +9,13 @@ fn draw_map(map: &Vec<Vec<TileType>>, window: &mut pancurses::Window) {
     }
 }
 
-fn draw_entities(window: &mut pancurses::Window,objects: &Vec<Object>) {
+fn draw_entities(window: &mut pancurses::Window, objects: &Vec<Object>) {
     for object in objects {
         object.draw(window);
     }
 }
 
-pub fn draw_everything(
-    objects: &Vec<Object>,
-    game: &mut Game,
-) {
+pub fn draw_everything(objects: &Vec<Object>, game: &mut Game) {
     game.window.clear();
     draw_map(&game.map, &mut game.window);
     draw_entities(&mut game.window, objects);

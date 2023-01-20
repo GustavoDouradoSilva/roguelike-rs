@@ -10,7 +10,7 @@ use object::*;
 
 fn main() {
     std::fs::File::create("log.txt").expect("Unable to create file");
-    
+
     let tile = TileType {
         ch: '#',
         walkable: false,
@@ -18,7 +18,7 @@ fn main() {
     };
 
     curses_setup();
-    let mut objects:Vec<Object> = Vec::new();
+    let mut objects: Vec<Object> = Vec::new();
     let mut game = Game {
         map: vec![vec![tile; MAP_WIDTH]; MAP_HEIGHT],
         //objects: Vec::new(),
