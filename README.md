@@ -4,6 +4,8 @@ based on these tutorials
 
 this game is incomplete and has just the rooms, halls and a simple movement system
 
+continuation of the project in https://github.com/GustavoDouradoSilva/roguelike-rs-ecs
+
 - [ ] CHANGE SYSTEM?
 - [ ] COLOR SYSTEM
 - [ ] ECS?
